@@ -97,7 +97,7 @@ $ docker-compose ps
 ```
 If any errors, you may need to retry `docker-compose up -d`
 
-#### 5. Configure CNAME (Optionals)
+### 5. Configure CNAME (Optionals)
 * Configure a CNAME to the APP ELB available in the output of CLoudFoundation
 * For insancte, the voting app is: http://www.gregori.site:5000/
 * And, the results at: http://www.gregori.site:5001/
