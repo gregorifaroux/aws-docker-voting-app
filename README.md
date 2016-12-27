@@ -57,6 +57,14 @@ You can launch the Cloudformation template using the AWS Console:
 * Confirm your AWS Region that you'd like to launch this stack in ( top right corner)
 * Upload the template to Amazon S3 and choose ddc_on_aws.json provided in this repo
 * Provide the required parameters ( listed below ) and click Next
+** KeyName: Name of an existing EC2 KeyPair to enable SSH access to the instances
+** UCPFQDN: Intended FQDN for UCP used to self-sign a cert with domain name.
+** UCPControllersInstanceType: AWS EC2 Instance Type for UCP Controllers only. Minimum required is m3.medium
+** DTRInstanceType: AWS EC2 Instance Type for DTR Replicas Only. Minimum required is m3.medium
+** UCPNodesInstanceType: AWS EC2 Instance Type for UCP nodes
+** ClusterSize: Number of UCP nodes (3-64)
+** License: Docker Datacenter License (copy+past it in JSON format or URL to download it). You can easily get trial license here
+** RootVolumeSize: Root filesystem size in GB. This will be used for all instances ( UCP Controllers, UCP Nodes, and DTR Nodes)
 * Confirm and Launch.
 * Monitor the status of the stack. When the status is CREATE_COMPLETE, the deployment is complete. Once all done ( it does take between 20-30 mins), click on outputs tab to see the URLs of UCP/DTR/APP ELB, default username and password, and jumphost info
 * Log in to the UCP and DTR management consoles by using the links in the Outputs tab.
@@ -66,16 +74,6 @@ You can launch the Cloudformation template using the AWS Console:
 ![Cloudformation screenshot](AWSCloudFormation.png)
 
 
-##### Required Paramters
-
-* KeyName: Name of an existing EC2 KeyPair to enable SSH access to the instances
-* UCPFQDN: Intended FQDN for UCP used to self-sign a cert with domain name.
-* UCPControllersInstanceType: AWS EC2 Instance Type for UCP Controllers only. Minimum required is m3.medium
-* DTRInstanceType: AWS EC2 Instance Type for DTR Replicas Only. Minimum required is m3.medium
-* UCPNodesInstanceType: AWS EC2 Instance Type for UCP nodes
-* ClusterSize: Number of UCP nodes (3-64)
-* License: Docker Datacenter License (copy+past it in JSON format or URL to download it). You can easily get trial license here
-* RootVolumeSize: Root filesystem size in GB. This will be used for all instances ( UCP Controllers, UCP Nodes, and DTR Nodes)
 
 ### 4. Deploy voting app via command line
 Docker UCP secures your cluster with role-based access control, so that only authorized users can perform changes to the cluster.
