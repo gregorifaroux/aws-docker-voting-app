@@ -1,4 +1,4 @@
-Instavote
+Docker Datacenter & Voting App Example on AWS
 =========
 
 # Getting started (Local)
