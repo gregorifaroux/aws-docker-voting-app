@@ -5,7 +5,9 @@ Docker Datacenter & Voting App Example on AWS
 * Download [Docker for Mac or Windows](https://www.docker.com).
 * Run in this directory:
 
+```
     $ docker-compose -f docker-compose-local.yml up
+```
 
 * The voting app will be running at [http://localhost:5000](http://localhost:5000)
 * The results will be at [http://localhost:5001](http://localhost:5001).
@@ -26,14 +28,16 @@ Deploy of highly-scalable, production-ready Docker Datacenter on AWS based on Do
 Docker Datacenter is an integrated solution including open source and commercial software, the integrations between them, full Docker API support, validated configurations and commercial support for your Docker Datacenter environment. A pluggable architecture allows flexibility in compute, networking and storage providers used in your CaaS infrastructure without disrupting the application code.
 
 ## 1. Register for a Docker Datacenter Trial License
+
 Before you deploy the Quick Start, you must obtain a trial license for Docker Datacenter.
-1. Create a Docker ID at https://hub.docker.com/register/ if you don’t already have one.
-2. Open the Docker Datacenter trial page at https://store.docker.com/bundles/dockerdatacenter
+
+1) Create a Docker ID at https://hub.docker.com/register/ if you don’t already have one.
+2) Open the Docker Datacenter trial page at https://store.docker.com/bundles/dockerdatacenter
 and log in with your credentials.
-3. In the upper right, choose your Docker ID, and then choose Subscriptions.
-4. On the Subscriptions page, you’ll see Docker Datacenter subscription details and a link
+3) In the upper right, choose your Docker ID, and then choose Subscriptions.
+4) On the Subscriptions page, you’ll see Docker Datacenter subscription details and a link
 to download the license key.
-5. Open the license with a text editor and copy the text to the Clipboard. You’ll need this
+5) Open the license with a text editor and copy the text to the Clipboard. You’ll need this
 license during the Quick Start deployment process.
 
 ### 2. Prepare an AWS Account
