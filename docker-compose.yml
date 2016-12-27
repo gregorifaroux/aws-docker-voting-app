@@ -1,25 +1,41 @@
 version: "2"
 
 services:
-  vote:
-    build: ./vote
-    command: python app.py
+  voting-app:
+    build: ./vote/.
     ports:
       - "5000:80"
+    networks:
+      back-tier:
 
+  result-app:
+    build: ./result/.
+    ports:
+      - "5001:80"
+    networks:
+      back-tier:
+
+  worker:
+    image: manomarks/worker
+    networks:
+      back-tier:
+       aliases:
+        - workers
   redis:
     image: redis:alpine
     ports: ["6379"]
-
-  worker:
-    build: ./worker
+    networks:
+      back-tier:
 
   db:
     image: postgres:9.4
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    networks:
+      back-tier:
 
-  result:
-    build: ./result
-    command: nodemon --debug server.js
-    ports:
-      - "5001:80"
-      - "5858:5858"
+volumes:
+  db-data:
+
+networks:
+  back-tier:
