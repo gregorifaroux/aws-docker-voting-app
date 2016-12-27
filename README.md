@@ -1,6 +1,8 @@
 Docker Datacenter & Voting App Example on AWS
 =========
 
+Deploy a simple voting app using Docker, Docker Datacenter, and Amazon AWS. First, you can run the app on your local environment, so you can see both the voting web page and result web page. Once you are familiar with the app, let us deploy it using Docker Datacenter (DDC) and AWS. Good luck!
+
 # Getting started (Local)
 * Download [Docker for Mac or Windows](https://www.docker.com).
 * Run in this directory:
@@ -102,10 +104,10 @@ If any errors, you may need to retry `docker-compose up -d`
 The app will be available at http://[Application ELB URL]:5000 and the results at http://[Application ELB URL]:5001
 
 ### 5. Configure CNAME (Optionals)
-* Configure a CNAME to the APP ELB available in the output of CLoudFoundation
-* For insancte, the voting app is: http://www.gregori.site:5000/
+* Configure a CNAME to the APP ELB available in the output of CloudFoundation
+* For instance, the voting app is: http://www.gregori.site:5000/
 * And, the results at: http://www.gregori.site:5001/
-* www.gregori.site points to the Application ELB URL found in the Output of the cloudformation (AWS)
+* www.gregori.site points to the Application ELB URL found in the Output of the cloudformation (AWS.) See CloudFormation screenshot above.
 
 ## Architecture
 
@@ -143,11 +145,11 @@ DTR 2.0.3
 
 
 
-Notes and Caveats
+##### Notes and Caveats
 
-UCP and DTR default username and password are admin/ddconaws. PLEASE CHANGE PASSWORD in UCP portal!!. To change the password, go to the UCP portal, under Users and Teams, click on edit button for the admin user. From there you can update the admin account password.
-External Certs: Both UCP and DTR are installed with self-signed certs today. If you wish to use your own certs, you can do so by following the UCP and DTR configuration guides. Full UCP and DTR Configuration guides are found here and here.
-A Single Security Group is used in this setup. The security group only allows HTTP,HTTPS, and SSH traffic from external IPs. Security group doesn't limit any traffic from within the cluster. Please adjust it as needed.
-SSH: If you need to SSH into the cluster you can do so by using SSH agent forwarding and ssh'ing into the jumphost node using the selected private key. Once you're logged into the jumphost, you can use the private IP address of any of the other nodes to ssh into them.
-Default username for ubuntu based AMI's is ubuntu.
-S
+* UCP and DTR default username and password are admin/ddconaws. PLEASE CHANGE PASSWORD in UCP portal!!. To change the password, go to the UCP portal, under Users and Teams, click on edit button for the admin user. From there you can update the admin account password.
+* External Certs: Both UCP and DTR are installed with self-signed certs today. If you wish to use your own certs, you can do so by following the UCP and DTR configuration guides. Full UCP and DTR Configuration guides are found here and here.
+* A Single Security Group is used in this setup. The security group only allows HTTP,HTTPS, and SSH traffic from external IPs. Security group doesn't limit any traffic from within the cluster. Please adjust it as needed.
+* SSH: If you need to SSH into the cluster you can do so by using SSH agent forwarding and ssh'ing into the jumphost node using the selected private key. Once you're logged into the jumphost, you can use the private IP address of any of the other nodes to ssh into them.
+* Default username for ubuntu based AMI's is ubuntu.
+
