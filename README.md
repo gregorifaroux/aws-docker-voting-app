@@ -71,13 +71,18 @@ type, and you think you might exceed the default limit with this reference deplo
 You can launch the Cloudformation template using the AWS Console or using the AWS CLI as follows:
 #### AWS Console:
 
-Click on Launch Stack below. This link will take you to AWS cloudformation portal.
-Confirm your AWS Region that you'd like to launch this stack in ( top right corner)
-Provide the required parameters ( listed below ) and click Next
-Confirm and Launch.
-Once all done ( it does take between 20-30 mins), click on outputs tab to see the URLs of UCP/DTR, default username and password, and jumphost info
+* Click on Launch Stack below. This link will take you to AWS cloudformation portal.
+* Confirm your AWS Region that you'd like to launch this stack in ( top right corner)
+* Provide the required parameters ( listed below ) and click Next
+* Confirm and Launch.
+* Monitor the status of the stack. When the status is CREATE_COMPLETE, the deployment is complete. Once all done ( it does take between 20-30 mins), click on outputs tab to see the URLs of UCP/DTR, default username and password, and jumphost info
+* Log in to the UCP and DTR management consoles by using the links in the Outputs
+tab.
 
-<p><a href="https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=DockerDatacenter&amp;templateBody=https://s3-us-west-2.amazonaws.com/ddc-on-aws-public/ddc_on_aws.json"><img src="https://camo.githubusercontent.com/210bb3bfeebe0dd2b4db57ef83837273e1a51891/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f636c6f7564666f726d6174696f6e2d6578616d706c65732f636c6f7564666f726d6174696f6e2d6c61756e63682d737461636b2e706e67" alt="Docker Datacenter on AWS" data-canonical-src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" style="max-width:100%;"></a></p>
+<p><a href="https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=DockerDatacenter&amp"><img src="https://camo.githubusercontent.com/210bb3bfeebe0dd2b4db57ef83837273e1a51891/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f636c6f7564666f726d6174696f6e2d6578616d706c65732f636c6f7564666f726d6174696f6e2d6c61756e63682d737461636b2e706e67" alt="Docker Datacenter on AWS" data-canonical-src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" style="max-width:100%;"></a></p>
+
+##### Upload template to Amazon S3
+* Upload a template to Amazon S3 and choose ddc_on_aws.json	provided in this repo
 
 ##### Required Paramters
 
@@ -90,12 +95,29 @@ Once all done ( it does take between 20-30 mins), click on outputs tab to see th
 * License: Docker Datacenter License (copy+past it in JSON format or URL to download it). You can easily get trial license here
 * RootVolumeSize: Root filesystem size in GB. This will be used for all instances ( UCP Controllers, UCP Nodes, and DTR Nodes)
 
-#### Deploy app
-Download bundle
-DDC
-docker-compose
-CNAME
-ELB ports
+#### Deploy app via CLI
+Docker UCP secures your cluster with role-based access control, so that only authorized users can perform changes to the cluster.
+
+##### Download client certificates
+1) To download a client certificate bundle, log into the UCP web UI, and navigate to your user profile page.
+2) Click the Create a Client Bundle button, to download the certificate bundle.
+
+##### Use client certificates
+```
+$ unzip ucp-bundle-admin.zip
+$ cd ucp-bundle-admin
+$ eval $(<env.sh)
+```
+
+##### Deploy app
+
+```
+$ docker-compose up -d
+$ docker-compose ps
+```
+
+##### Configure CNAME (Optionals)
+* Configure a CNAME to the APP ELB available in the output of CLoudFoundation
 
 ##### Key Functionalities
 
