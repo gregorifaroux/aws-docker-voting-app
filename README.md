@@ -63,6 +63,9 @@ You can launch the Cloudformation template using the AWS Console:
 
 <p><a href="https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=DockerDatacenter&amp"><img src="https://camo.githubusercontent.com/210bb3bfeebe0dd2b4db57ef83837273e1a51891/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f636c6f7564666f726d6174696f6e2d6578616d706c65732f636c6f7564666f726d6174696f6e2d6c61756e63682d737461636b2e706e67" alt="Docker Datacenter on AWS" data-canonical-src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" style="max-width:100%;"></a></p>
 
+![Cloudformation screenshot](AWSCloudFormation.png)
+
+
 ##### Required Paramters
 
 * KeyName: Name of an existing EC2 KeyPair to enable SSH access to the instances
@@ -96,6 +99,8 @@ $ docker-compose up -d
 $ docker-compose ps
 ```
 If any errors, you may need to retry `docker-compose up -d`
+
+The app will be available at http://[Application ELB URL]:5000 and the results at http://[Application ELB URL]:5001
 
 ### 5. Configure CNAME (Optionals)
 * Configure a CNAME to the APP ELB available in the output of CLoudFoundation
