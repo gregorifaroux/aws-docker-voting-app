@@ -15,7 +15,7 @@ Deploy a simple voting app using Docker, Docker Datacenter, and Amazon AWS. Firs
 * The results will be at [http://localhost:5001](http://localhost:5001).
 
 ## Architecture
-![Architecture diagram](architecture.png)
+![Architecture diagram](images/architecture.png)
 
 * A Python webapp which lets you vote between two options
 * A Redis queue which collects new votes
@@ -72,7 +72,7 @@ You can launch the Cloudformation template using the AWS Console:
 
 <p><a href="https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=DockerDatacenter&amp"><img src="https://camo.githubusercontent.com/210bb3bfeebe0dd2b4db57ef83837273e1a51891/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f636c6f7564666f726d6174696f6e2d6578616d706c65732f636c6f7564666f726d6174696f6e2d6c61756e63682d737461636b2e706e67" alt="Docker Datacenter on AWS" data-canonical-src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" style="max-width:100%;"></a></p>
 
-![Cloudformation screenshot](AWSCloudFormation.png)
+![Cloudformation screenshot](images/AWSCloudFormation.png)
 
 
 
@@ -115,14 +115,16 @@ You will find the Application ELB URL in the CloudFormation (see above screensho
 
 ## Architecture
 
-![Architecture diagram](design_0.png)
+![Architecture diagram](images/design_0.png)
 
 Docker Data Center is composed of two main components: Docker Universal Control Plane (UCP) and Docker Trusted Registry (DTR). UCP is an enterprise-grade cluster management solution from Docker that helps you manage your whole cluster from a single place. UCP is made of the UCP controllers and UCP nodes.
 
 DTR is the enterprise-grade image storage solution from Docker that helps you can securely store and manage the Docker images you use in your applications. DTR is made of DTR replicas only that are deployed on UCP nodes.
 
-![Architecture diagram](design_3.png)
+![Architecture diagram](images/design_3.png)
 The AWS Cloudformation starts the installation process by creating all the required AWS resources such as the VPC, security groups, public and private subnets, internet gateways, NAT gateways, and S3 bucket. It then launches the first UCP controller instance and goes through the installation process of Docker engine and UCP containers. It backs the Root CAs created by the first UCP controllers to S3. Once the first UCP controller is up and running, the process of creating the other UCP controllers, the UCP cluster nodes, and the first DTR replica is triggered. Similar to the first UCP controller node, all other nodes are started by installing Docker Commercially Supported engine, followed by running the UCP and DTR containers to join the cluster. Three ELBs, one for UCP, one for DTR and a third for your application, are launched and automatically configured to provide resilient loadbalancing across three AZs.
+
+![Availability Zone](images/instancesaz.png)
 
 ##### Key Functionalities
 

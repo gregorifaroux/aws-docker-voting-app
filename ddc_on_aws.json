@@ -944,7 +944,7 @@
         "CidrIp": "0.0.0.0/0"
       }
     },
-    "HTTPSecurityGroupIngress": {
+    "HTTPSecurityGroupIngress5000": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "Properties": {
         "GroupId": {
@@ -956,7 +956,7 @@
         "CidrIp": "0.0.0.0/0"
       }
     },
-    "HTTPSecurityGroupIngress": {
+    "HTTPSecurityGroupIngress5001": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "Properties": {
         "GroupId": {
