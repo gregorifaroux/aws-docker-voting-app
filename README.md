@@ -65,6 +65,7 @@ You can launch the Cloudformation template using the AWS Console:
     > * License: Docker Datacenter License (copy+past it in JSON format or URL to download it). You can easily get trial license here
     > * RootVolumeSize: Root filesystem size in GB. This will be used for all instances ( UCP Controllers, UCP Nodes, and DTR Nodes)
 
+* Check the box 'I acknowledge that AWS CloudFormation might create IAM resources.'
 * Confirm and Launch.
 * Monitor the status of the stack. When the status is CREATE_COMPLETE, the deployment is complete. Once all done ( it does take approx. 30 mins), click on outputs tab to see the URLs of UCP/DTR/APP ELB, default username and password, and jumphost info
 * Log in to the UCP and DTR management consoles by using the links in the Outputs tab and change the default passwords

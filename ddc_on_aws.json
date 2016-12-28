@@ -2330,7 +2330,7 @@
             "DeleteOnTermination": "true",
             "DeviceIndex": "0",
             "SubnetId": {
-              "Ref": "PrivateSubnetAz2"
+              "Ref": "PrivateSubnetAz3"
             },
             "GroupSet": [
               {
