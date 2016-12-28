@@ -3,3 +3,9 @@ project.lock.json
 bin/
 obj/
 ucp-bundle-admin/
+.DS_store
+jumphost.sh
+*.pem
+*.key
+*.crt
+
