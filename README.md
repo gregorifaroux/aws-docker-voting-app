@@ -136,21 +136,9 @@ The AWS Cloudformation starts the installation process by creating all the requi
 * Creates a UCP Nodes ELB with preconfigured healthchecks (TCP Port 80). This can be used for your application that are deployed on UCP.
 * Creates a Cloudwatch Log Group (called DDCLogGroup)and allows log streams from DDC instances. It also automatically logs the UCP and DTR installation * containers.
 
-<<<<<<< 08a93a606079e3b846e1856dbf5ac48b3a0dbeab
 ##### Notes and Caveats
-
-* UCP and DTR default username and password are admin/ddconaws. PLEASE CHANGE PASSWORD in UCP portal!!. To change the password, go to the UCP portal, under Users and Teams, click on edit button for the admin user. From there you can update the admin account password.
-* External Certs: Both UCP and DTR are installed with self-signed certs today. If you wish to use your own certs, you can do so by following the UCP and DTR configuration guides. Full UCP and DTR Configuration guides are found here and here.
-* A Single Security Group is used in this setup. The security group only allows HTTP,HTTPS, and SSH traffic from external IPs. Security group doesn't limit any traffic from within the cluster. Please adjust it as needed.
-* SSH: If you need to SSH into the cluster you can do so by using SSH agent forwarding and ssh'ing into the jumphost node using the selected private key. Once you're logged into the jumphost, you can use the private IP address of any of the other nodes to ssh into them.
-* Default username for ubuntu based AMI's is ubuntu.
-
-=======
-###### Notes and Caveats
-
 * UCP and DTR default username and password are admin/ddconaws. PLEASE CHANGE PASSWORD in UCP portal!!. To change the password, go to the UCP portal, under Users and Teams, click on edit button for the admin user. From there you can update the admin account password.
 * External Certs: Both UCP and DTR are installed with self-signed certs today. If you wish to use your own certs, you can do so by following the UCP and DTR configuration guides. Full UCP and DTR Configuration guides are found here and here.
 * A Single Security Group is used in this setup. TODO: Create two security groups: one for the load balancer and one for the EC2 instances.
 * SSH: If you need to SSH into the cluster you can do so by using SSH agent forwarding and ssh'ing into the jumphost node using the selected private key. Once you're logged into the jumphost, you can use the private IP address of any of the other nodes to ssh into them.
 * Default username for ubuntu based AMI's is ubuntu.
->>>>>>> Update doc
