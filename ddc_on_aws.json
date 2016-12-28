@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "QS(0025) Docker Datacenter Quickstart for AWS, Version 1.3, October 2016",
+  "Description": "Based on QS(0025) Docker Datacenter Quickstart for AWS, Version 1.3, October 2016",
   "Parameters": {
     "KeyName": {
       "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
@@ -188,11 +188,17 @@
       "pubsubnet2": {
         "cidr": "192.168.34.0/24"
       },
+      "pubsubnet3": {
+        "cidr": "192.168.35.0/24"
+      },
       "privatesubnet1": {
         "cidr": "192.168.23.0/24"
       },
       "privatesubnet2": {
         "cidr": "192.168.24.0/24"
+      },
+      "privatesubnet3": {
+        "cidr": "192.168.25.0/24"
       }
     },
     "AWSInstanceType2Arch": {
@@ -484,6 +490,47 @@
         ]
       }
     },
+    "PubSubnetAz3": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc"
+        },
+        "CidrBlock": {
+          "Fn::FindInMap": [
+            "VpcCidrs",
+            "pubsubnet3",
+            "cidr"
+          ]
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "2",
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "PublicSubnet3"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
     "PrivateSubnetAz1": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
@@ -566,6 +613,47 @@
         ]
       }
     },
+    "PrivateSubnetAz3": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc"
+        },
+        "CidrBlock": {
+          "Fn::FindInMap": [
+            "VpcCidrs",
+            "privatesubnet3",
+            "cidr"
+          ]
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "2",
+            {
+              "Fn::GetAZs": {
+                "Ref": "AWS::Region"
+              }
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "PrivateSubnet3"
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
     "InternetGateway": {
       "Type": "AWS::EC2::InternetGateway",
       "Properties": {
@@ -636,6 +724,17 @@
       "Properties": {
         "SubnetId": {
           "Ref": "PubSubnetAz2"
+        },
+        "RouteTableId": {
+          "Ref": "RouteViaIgw"
+        }
+      }
+    },
+    "PubSubnet3RouteTableAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PubSubnetAz3"
         },
         "RouteTableId": {
           "Ref": "RouteViaIgw"
@@ -746,13 +845,65 @@
         }
       }
     },
+    "NATAZ3": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "EIP3",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "PubSubnetAz3"
+        }
+      }
+    },
+    "EIP3": {
+      "DependsOn": "AttachGateway",
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc"
+      }
+    },
+    "NatAZ3Route": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "RouteViaNatAZ3"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "NATAZ3"
+        }
+      }
+    },
+    "RouteViaNatAZ3": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc"
+        }
+      }
+    },
+    "PrivateSubnet3RouteTableAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PrivateSubnetAz3"
+        },
+        "RouteTableId": {
+          "Ref": "RouteViaNatAZ3"
+        }
+      }
+    },
     "DefaultSG": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
         "VpcId": {
           "Ref": "vpc"
         },
-        "GroupDescription": "Default VPC Security Group. Allows only port 443 externally and all traffic from within the Security Group."
+        "GroupDescription": "Example VPC Security Group."
       }
     },
     "AllTrafficSecurityGroupIngress": {
@@ -1267,6 +1418,9 @@
           },
           {
             "Ref": "PubSubnetAz2"
+          },
+          {
+            "Ref": "PubSubnetAz3"
           }
         ],
         "ConnectionSettings": {
@@ -1317,6 +1471,9 @@
           },
           {
             "Ref": "PubSubnetAz2"
+          },
+          {
+            "Ref": "PubSubnetAz3"
           }
         ],
         "ConnectionSettings": {
@@ -1357,6 +1514,9 @@
                 },
                 {
                   "Ref": "PrivateSubnetAz2"
+                },
+                {
+                  "Ref": "PrivateSubnetAz3"
                 }
               ]
             ]
@@ -1499,6 +1659,9 @@
                 },
                 {
                   "Ref": "PrivateSubnetAz2"
+                },
+                {
+                  "Ref": "PrivateSubnetAz3"
                 }
               ]
             ]
@@ -2130,7 +2293,7 @@
       "Properties": {
         "AvailabilityZone": {
           "Fn::Select": [
-            "0",
+            "2",
             {
               "Fn::GetAZs": {
                 "Ref": "AWS::Region"
@@ -2167,7 +2330,7 @@
             "DeleteOnTermination": "true",
             "DeviceIndex": "0",
             "SubnetId": {
-              "Ref": "PrivateSubnetAz1"
+              "Ref": "PrivateSubnetAz2"
             },
             "GroupSet": [
               {
@@ -2303,6 +2466,9 @@
           },
           {
             "Ref": "PubSubnetAz2"
+          },
+          {
+            "Ref": "PubSubnetAz3"
           }
         ],
         "ConnectionSettings": {

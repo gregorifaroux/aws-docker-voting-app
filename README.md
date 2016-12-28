@@ -47,9 +47,6 @@ following the on-screen instructions.
 2. Use the region selector in the navigation bar to choose the Amazon EC2 region where
 you want to deploy Docker Datacenter on AWS.
 3. Create a key pair in your preferred region.
-4. If necessary, request a service limit increase for the Amazon EC2 M3 instance type. You
-might need to do this if you already have an existing deployment that uses this instance
-type, and you think you might exceed the default limit with this reference deployment.
 
 ### 3. Launch Docker Datacenter
 
@@ -57,7 +54,7 @@ You can launch the Cloudformation template using the AWS Console:
 #### AWS Console:
 * Click on Launch Stack below. This link will take you to AWS cloudformation portal.
 * Confirm your AWS Region that you'd like to launch this stack in ( top right corner)
-* Upload the template to Amazon S3 and choose ddc_on_aws.json provided in this repo
+* Select 'Upload the template to Amazon S3' and choose `ddc_on_aws.json` provided in this repo
 * Provide the required parameters ( listed below ) and click Next
     > * KeyName: Name of an existing EC2 KeyPair to enable SSH access to the instances
     > * UCPFQDN: Intended FQDN for UCP used to self-sign a cert with domain name.
@@ -69,8 +66,8 @@ You can launch the Cloudformation template using the AWS Console:
     > * RootVolumeSize: Root filesystem size in GB. This will be used for all instances ( UCP Controllers, UCP Nodes, and DTR Nodes)
 
 * Confirm and Launch.
-* Monitor the status of the stack. When the status is CREATE_COMPLETE, the deployment is complete. Once all done ( it does take between 20-30 mins), click on outputs tab to see the URLs of UCP/DTR/APP ELB, default username and password, and jumphost info
-* Log in to the UCP and DTR management consoles by using the links in the Outputs tab.
+* Monitor the status of the stack. When the status is CREATE_COMPLETE, the deployment is complete. Once all done ( it does take approx. 30 mins), click on outputs tab to see the URLs of UCP/DTR/APP ELB, default username and password, and jumphost info
+* Log in to the UCP and DTR management consoles by using the links in the Outputs tab and change the default passwords
 
 <p><a href="https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=DockerDatacenter&amp"><img src="https://camo.githubusercontent.com/210bb3bfeebe0dd2b4db57ef83837273e1a51891/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f636c6f7564666f726d6174696f6e2d6578616d706c65732f636c6f7564666f726d6174696f6e2d6c61756e63682d737461636b2e706e67" alt="Docker Datacenter on AWS" data-canonical-src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" style="max-width:100%;"></a></p>
 
@@ -79,12 +76,12 @@ You can launch the Cloudformation template using the AWS Console:
 
 
 ### 4. Deploy voting app via command line
-Docker UCP secures your cluster with role-based access control, so that only authorized users can perform changes to the cluster.
+Docker UCP secures your cluster with role-based access control, so that only authorized users can perform changes to the cluster. You first need to download the client bundle, so you can push the apps from your local setup (e.g. laptop...)
 
 ##### 4.1. Download client certificates
 1) To download a client certificate bundle, log into the UCP web UI, and navigate to your user profile page.
 2) Click the Create a Client Bundle button, to download the certificate bundle.
-3) I normally store the client certificate bundle in a folder ucp-bundle-admin in this repo with .gitignore configured to not upload it.
+3) We normally store the client certificate bundle in a folder ucp-bundle-admin in this repo with .gitignore configured to not upload it in your git repository.
 
 ##### 4.2. Use client certificates
 ```
@@ -99,12 +96,18 @@ $ eval $(<env.sh)
 $ docker-compose up -d
 $ docker-compose ps
 ```
-If any errors, you may need to retry `docker-compose up -d`
+If any errors, retry `docker-compose up -d` and that should work. If not, create an issue in this repo.
 
 The app will be available at http://[Application ELB URL]:5000 and the results at http://[Application ELB URL]:5001
 
+You will find the Application ELB URL in the CloudFormation (see above screenshot.)
+
 ### 5. Configure CNAME (Optionals)
+<<<<<<< 08a93a606079e3b846e1856dbf5ac48b3a0dbeab
 * Configure a CNAME to the APP ELB available in the output of CloudFoundation
+=======
+* Configure a CNAME to the APP ELB available in the output of CLoudFoundation
+>>>>>>> Update doc
 * For instance, the voting app is: http://www.gregori.site:5000/
 * And, the results at: http://www.gregori.site:5001/
 * www.gregori.site points to the Application ELB URL found in the Output of the cloudformation (AWS.) See CloudFormation screenshot above.
@@ -118,9 +121,7 @@ Docker Data Center is composed of two main components: Docker Universal Control 
 DTR is the enterprise-grade image storage solution from Docker that helps you can securely store and manage the Docker images you use in your applications. DTR is made of DTR replicas only that are deployed on UCP nodes.
 
 ![Architecture diagram](design_3.png)
-The AWS Cloudformation starts the installation process by creating all the required AWS resources such as the VPC, security groups, public and private subnets, internet gateways, NAT gateways, and S3 bucket. It then launches the first UCP controller instance and goes through the installation process of Docker engine and UCP containers. It backs the Root CAs created by the first UCP controllers to S3. Once the first UCP controller is up and running, the process of creating the other UCP controllers, the UCP cluster nodes, and the first DTR replica is triggered. Similar to the first UCP controller node, all other nodes are started by installing Docker Commercially Supported engine, followed by running the UCP and DTR containers to join the cluster. Three ELBs, one for UCP, one for DTR and a third for your application, are launched and automatically configured to provide resilient loadbalancing across the two AZs. Additionally, UCP controllers and nodes are launched in an ASG to provide scaling functionality if needed. This architecture ensures that both UCP and DTR instances are spread across both AZs to ensure resiliency and high-availability. UCP worker nodes are launched with �interlock and nginx to dynamically register your deployed applications.
-
-
+The AWS Cloudformation starts the installation process by creating all the required AWS resources such as the VPC, security groups, public and private subnets, internet gateways, NAT gateways, and S3 bucket. It then launches the first UCP controller instance and goes through the installation process of Docker engine and UCP containers. It backs the Root CAs created by the first UCP controllers to S3. Once the first UCP controller is up and running, the process of creating the other UCP controllers, the UCP cluster nodes, and the first DTR replica is triggered. Similar to the first UCP controller node, all other nodes are started by installing Docker Commercially Supported engine, followed by running the UCP and DTR containers to join the cluster. Three ELBs, one for UCP, one for DTR and a third for your application, are launched and automatically configured to provide resilient loadbalancing across three AZs.
 
 ##### Key Functionalities
 
@@ -134,17 +135,9 @@ The AWS Cloudformation starts the installation process by creating all the requi
 * Creates a DTR with preconfigured healthchecks
 * Creates a jumphost ec2 instance to be able to ssh to the DDC nodes
 * Creates a UCP Nodes ELB with preconfigured healthchecks (TCP Port 80). This can be used for your application that are deployed on UCP.
-* Deploys NGINX+Interlock to dynamically register your application containers. Please see FAQ for more details on launching your application.
 * Creates a Cloudwatch Log Group (called DDCLogGroup)and allows log streams from DDC instances. It also automatically logs the UCP and DTR installation * containers.
-* Software Versions
 
-EC2 instances use Ubuntu 14.04 LTS AMI
-Docker Commercially Supported Engine 1.12
-UCP 1.1.4
-DTR 2.0.3
-
-
-
+<<<<<<< 08a93a606079e3b846e1856dbf5ac48b3a0dbeab
 ##### Notes and Caveats
 
 * UCP and DTR default username and password are admin/ddconaws. PLEASE CHANGE PASSWORD in UCP portal!!. To change the password, go to the UCP portal, under Users and Teams, click on edit button for the admin user. From there you can update the admin account password.
@@ -153,3 +146,12 @@ DTR 2.0.3
 * SSH: If you need to SSH into the cluster you can do so by using SSH agent forwarding and ssh'ing into the jumphost node using the selected private key. Once you're logged into the jumphost, you can use the private IP address of any of the other nodes to ssh into them.
 * Default username for ubuntu based AMI's is ubuntu.
 
+=======
+###### Notes and Caveats
+
+* UCP and DTR default username and password are admin/ddconaws. PLEASE CHANGE PASSWORD in UCP portal!!. To change the password, go to the UCP portal, under Users and Teams, click on edit button for the admin user. From there you can update the admin account password.
+* External Certs: Both UCP and DTR are installed with self-signed certs today. If you wish to use your own certs, you can do so by following the UCP and DTR configuration guides. Full UCP and DTR Configuration guides are found here and here.
+* A Single Security Group is used in this setup. TODO: Create two security groups: one for the load balancer and one for the EC2 instances.
+* SSH: If you need to SSH into the cluster you can do so by using SSH agent forwarding and ssh'ing into the jumphost node using the selected private key. Once you're logged into the jumphost, you can use the private IP address of any of the other nodes to ssh into them.
+* Default username for ubuntu based AMI's is ubuntu.
+>>>>>>> Update doc
