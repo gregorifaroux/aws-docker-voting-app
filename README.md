@@ -103,7 +103,7 @@ The app will be available at http://[Application ELB URL]:5000 and the results a
 
 You will find the Application ELB URL in the CloudFormation (see above screenshot.)
 
-### 5. Configure CNAME (Optionals)
+### 5. Configure CNAME (Optional)
 * Configure a CNAME to the APP ELB available in the output of CloudFoundation
 * For instance, the voting app is: http://www.gregori.site:5000/
 * And, the results at: http://www.gregori.site:5001/
